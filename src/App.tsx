@@ -1,16 +1,28 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import './App.css';
 import Header from './components/layout/Header';
 import Home from './components/layout/Home';
 import Footer from './components/layout/Footer';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import RoomList from "./components/room/RoomList";
+import RoomDetail from "./components/room/RoomDetail";
 
 function App() {
   return (
-    <Fragment>
-      <Header />
-      <Home />
-      <Footer />
-    </Fragment>
+
+
+    <Router>
+        <Header />
+        <Routes>
+            <Route>
+                <Route path="/" element={<Home />}/>
+                <Route path="/room/list" element={<RoomList />}/>
+                <Route path="/room/detail/:no" element={<RoomDetail />}/>
+            </Route>
+        </Routes>
+        <Footer />
+    </Router>
+
   );
 }
 
