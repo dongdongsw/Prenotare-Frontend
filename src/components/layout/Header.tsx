@@ -13,7 +13,7 @@ function Header(){
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item"><a className="nav-link" href={"/"}>Home</a></li>
-                            <li className="nav-item"><a className="nav-link" href={"/room/list"}>방 목록</a></li>
+                            <li className="nav-item"><a className="nav-link" href={"/room/list"}>회의실</a></li>
                             <li className="nav-item"><a className="nav-link" href="contact.html">Contact</a></li>
                             <li className="nav-item"><a className="nav-link" href="pricing.html">Pricing</a></li>
                             <li className="nav-item"><a className="nav-link" href="faq.html">FAQ</a></li>

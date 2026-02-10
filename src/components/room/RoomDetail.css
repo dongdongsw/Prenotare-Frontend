@@ -1,0 +1,28 @@
+/* 전체 폭 */
+.flatpickr-calendar,
+.flatpickr-days,
+.flatpickr-months,
+.flatpickr-weekdays {
+  width: 490px;
+}
+
+/* 날짜만 grid로 */
+.dayContainer {
+  display: grid;
+  margin-left: 10px;
+  grid-template-columns: repeat(7, 70px);
+}
+
+/* 날짜 셀 */
+.flatpickr-day {
+  width: 70px;
+  height: 56px;
+  line-height: 56px;
+}
+
+/* 요일은 flex 유지 + 폭만 고정 */
+.flatpickr-weekday {
+  width: 70px;
+  text-align: center;
+  font-size: 15px;
+}
