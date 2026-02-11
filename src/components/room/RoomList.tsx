@@ -42,15 +42,24 @@ function RoomList(){
                                 room.status === "AVAILABLE"
                                     ?"bg-primary"
                                     :"bg-warning";
-                                return(
+
+                            const roomStatus =
+                                room.status === "AVAILABLE"
+                                    ?"이용 가능"
+                                    :"이용 불가";
+
+                            
+                            return(
                             <Fragment key={index}>
                                 <div className="col-lg-4 mb-5">
                                     <div className="card h-100 shadow border-0">
-                                        <img className="card-img-top" src={room.thumbnail} alt="..." />
+                                        <img className="card-img-top" src={room.thumbnail} alt="..." style={{"height" : "282px", "width":"376px"}}/>
                                         <div className="card-body p-4">
                                             {/* 방 이용 가능한 상태 넣기 */}
-                                            <div className="badge bg-primary bg-gradient rounded-pill mb-2">{room.status}</div>
-                                            <Link className="text-decoration-none link-dark stretched-link" to={"/room/detail/" + 1}><div className="h5 card-title mb-3">{room.name}</div></Link>
+                                            <div className={`badge ${color} bg-gradient rounded-pill mb-2`}>{roomStatus}</div>
+                                            <Link className="text-decoration-none link-dark stretched-link" to={`/room/detail/${room.no}`}>
+                                                <div className="h5 card-title mb-3">{room.name}</div>
+                                            </Link>
                                         </div>
                                         <div className="card-footer p-4 pt-0 bg-transparent border-top-0">
                                             <div className="d-flex align-items-end justify-content-between">
@@ -71,7 +80,7 @@ function RoomList(){
                     }
                     </div>
                     {/* 페이지 네이션 넣기 */}
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation example" >
                         {
                             data &&
                             <PagePrint data={data} setCurpage={setCurpage}/>

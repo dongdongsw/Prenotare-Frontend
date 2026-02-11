@@ -9,7 +9,8 @@ export interface RoomData{
 export interface RoomItem{
     no:number;
     name:string;
-    personnel:string;
+    content:string;
+    personnel:number;
     thumbnail:string;
     images:string;
     status:string;
@@ -18,4 +19,11 @@ export interface RoomItem{
     closetime:string;
     createdAt:string;
     updatedAt:string;
+    imageList:string[];
+}
+
+export interface LoginData{
+    id:string;
+    name:string;
+    msg:string;
 }

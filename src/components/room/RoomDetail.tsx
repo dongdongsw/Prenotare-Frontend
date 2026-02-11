@@ -3,12 +3,63 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 import { useState } from "react";
 import "./RoomDetail.css"
+import { useQuery } from "@tanstack/react-query";
+import { RoomItem } from "../../commons/commonsData";
+import { useParams } from "react-router";
+import apiClient from "../../http-commons";
 
 
 function RoomDetail(){
     const [date, setDate] = useState<Date | null>(null);
+    const {no} = useParams();
+    const {isLoading, isError, error, data} = useQuery<RoomItem>({
+        queryKey:['room_detail', no],
+        queryFn: async() => {
+            const res = await apiClient.get(`/room/detail/${no}`);
+            console.log(res.data);
+            return res.data;
+        }
+    })
 
+    if(isLoading) {
+        return <h1 className={"text-center"}>Loading ...</h1>
+    }
+    if(isError) {
+        return <h1 className={"text-center"}>Error발생 : {error?.message}</h1>
+    }
 
+    const color =
+        data?.status === "AVAILABLE"
+            ?"bg-primary"
+            :"bg-warning";
+
+    const roomStatus =
+        data?.status === "AVAILABLE"
+            ?"이용 가능"
+            :"이용 불가";
+
+   
+    const Time = (open:string, close:string)=>{
+        const result: string[] = [];
+
+        let start = new Date(`1970-01-01T${open.slice(0,5)}:00`);
+        let end = new Date(`1970-01-01T${close.slice(0,5)}:00`);
+
+        while(start <= end){
+            result.push(
+                start.toTimeString().slice(0,5)
+            )
+            start.setHours(
+                start.getHours() + 1
+            )
+        }
+        return result;
+    }
+    
+    const timeArr = data?Time(data?.opentime, data?.closetime) : [];
+    console.log("open:", data?.opentime);
+    console.log("close:", data?.closetime);
+    console.log("timeArr:", timeArr);
 
     return(
         <Fragment>
@@ -16,24 +67,28 @@ function RoomDetail(){
                 <div className="container px-5 my-5">
                     <div className="row gx-5">
                         <header className="mb-4">
-                                    <h1 className="fw-bolder mb-1">Welcome to Blog Post!</h1>
-                                    <div className="text-muted fst-italic mb-2">January 1, 2023</div>
-                                    <a className="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                                    <a className="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                                    <h1 className="fw-bolder mb-1">{data?.name} | {data?.personnel}명</h1>
+                                    <div className="text-muted fst-italic mb-2">등록날짜 : {data?.createdAt}</div>
+                                    <a className={`badge ${color} text-decoration-none link-light`} href="#!">{roomStatus}</a>
                                 </header>
 
                         <div className="col-lg-7">
                             <article>
 
-                                <p className="fs-5 mb-4">소개</p>
-                                <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                                <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                                <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                                <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
+                                <p className="fs-5 mb-4">{data?.content}</p>
+                                {
+                                    data?.imageList?.map((image:string, index:number)=>
+                                        <Fragment key={index}>
+                                            <figure className="mb-4">
+                                                <img className="img-fluid rounded" src={image} alt="..." />
+                                            </figure>
+                                        </Fragment>
+                                    )
+                                }
                             </article>
                         </div>
-                        <div className="col-lg-5">
-                            <div className="d-flex align-items-center mt-lg-1 mb-4">
+                        <div className="col-lg-5" style={{"backgroundColor":"#fff", "borderRadius":"15px", "boxShadow":"0 8px 24px rgba(0,0,0,0.06)"}}>
+                            <div className="d-flex align-items-center mt-lg-4 mb-4">
                                 <div className="ms-12">
                                     <div className="fw-bold">날짜 선택</div>
                                 </div>
@@ -48,12 +103,26 @@ function RoomDetail(){
                                     <input ref={ref} style={{ display: "none" }} />
                                 )}
                                 />
-
-                        </div>
+                            <div className="d-flex align-items-center mt-lg-4 mb-4">
+                                <div className="ms-12">
+                                    <div className="fw-bold">시간 선택 | 이용 시작 시간 : {data?.opentime} 이용 종료 시간 : {data?.closetime}</div>
+                                </div>
+                            </div>
+                            {
+                                timeArr?.slice(0, -1).map((time:string,index:number)=>
+                                    <button type="button" style={{"color":"white"}} className="btn btn-info my-2 px-2 me-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover" key={index}>
+                                        {time} ~ {timeArr[index + 1]}
+                                    </button>
+                                )
+                            }
+                            <div className="d-grid gap-2 my-4">
+                                <button className="btn btn-info" type="button" style={{"color":"white"}}>예약하기</button>
+                            </div>
+                    </div>
                         {/* 댓글 */}
                         <section>
-                            <div className="card bg-light">
-                                <div className="card-body">
+                            <div className="card bg-light  my-4">
+                                <div className="card-body" >
                                     
                                     <form className="mb-4"><textarea className="form-control" rows={3} placeholder="Join the discussion and leave a comment!"></textarea></form>
                                     
