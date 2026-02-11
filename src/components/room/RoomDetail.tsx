@@ -8,6 +8,8 @@ import "./RoomDetail.css"
 function RoomDetail(){
     const [date, setDate] = useState<Date | null>(null);
 
+
+
     return(
         <Fragment>
              <section className="py-5">
@@ -19,10 +21,10 @@ function RoomDetail(){
                                     <a className="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
                                     <a className="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
                                 </header>
-                        
+
                         <div className="col-lg-7">
                             <article>
-                                
+
                                 <p className="fs-5 mb-4">소개</p>
                                 <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                                 <figure className="mb-4"><img className="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
