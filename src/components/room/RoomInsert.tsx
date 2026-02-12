@@ -1,7 +1,7 @@
 import {Fragment, useRef, useState} from "react";
 import {RoomItem, RoomData} from "../../commons/commonsData";
 import {useQuery, useMutation} from "@tanstack/react-query";
-import apiClient from "../../http-commons";
+import {fileClient} from "../../http-commons";
 
 function RoomInsert() {
     const [name, setName] = useState<string>("");
@@ -21,15 +21,9 @@ function RoomInsert() {
     const imageListRef = useRef<HTMLInputElement>(null);
 
     const {mutate:RoomInsert} = useMutation({
-        mutationFn: async () => {
-            const res = await apiClient.post(`/room/insert`, {
-                name,
-                personnel,
-                content,
-                opentime,
-                closetime
-            });
-            return res;
+        mutationFn: async (formData: FormData) => {
+            return await fileClient.post(`/room/insert`, formData);
+             
         }
     })
 
@@ -53,10 +47,25 @@ function RoomInsert() {
         if(!thumbnail){
             return thumbnailRef.current?.focus();
         }
-        if(!imageList){
+        if(imageList.length === 0){
             return imageListRef.current?.focus();
         }
-        RoomInsert()
+
+        const formData = new FormData();
+        console.log("thumbnail:", thumbnail);
+        console.log("imageList:", imageList);
+        formData.append("name", name);
+        formData.append("content", content);
+        formData.append("personnel", personnel);
+        formData.append("thumbFile", thumbnail);
+        formData.append("opentime", opentime);
+        formData.append("closetime", closetime);
+
+        imageList.forEach(file => {
+            formData.append("imageFiles", file);
+        })
+
+        RoomInsert(formData)
     }
 
     return(

@@ -2,7 +2,7 @@ import {Fragment, useState} from "react";
 import { Link } from "react-router";
 import {RoomData, RoomItem} from "../../commons/commonsData";
 import {useQuery} from "@tanstack/react-query";
-import apiClient from "../../http-commons";
+import {apiClient} from "../../http-commons";
 import PagePrint from "../../commons/PagePrint";
 
 
@@ -52,12 +52,21 @@ function RoomList(){
                                             ? "이용 가능"
                                             : "이용 불가";
 
+                                    const getImageUrl = (img:string)=>{
+                                        if(!img){
+                                            return "";
+                                        }
+                                        if(img.startsWith("http")){
+                                            return img
+                                        }
+                                        return `http://localhost:9090/${img}`
+                                    }
 
                                     return (
                                         <Fragment key={index}>
                                             <div className="col-lg-4 mb-5">
                                                 <div className="card h-100 shadow border-0">
-                                                    <img className="card-img-top" src={room.thumbnail} alt="..."
+                                                    <img className="card-img-top" src={getImageUrl(room.thumbnail)} alt="..."
                                                          style={{"height": "282px", "width": "376px"}}/>
                                                     <div className="card-body p-4">
                                                         {/* 방 이용 가능한 상태 넣기 */}

@@ -6,7 +6,7 @@ import "./RoomDetail.css"
 import { useQuery } from "@tanstack/react-query";
 import { RoomItem } from "../../commons/commonsData";
 import { useParams } from "react-router";
-import apiClient from "../../http-commons";
+import {apiClient} from "../../http-commons";
 
 
 function RoomDetail(){
@@ -61,6 +61,17 @@ function RoomDetail(){
     console.log("close:", data?.closetime);
     console.log("timeArr:", timeArr);
 
+    const getImageUrl = (img:string)=>{
+        if(!img){
+            return "";
+        }
+        const clean = img.trim();
+        if(clean.startsWith("http")){
+            return img
+        }
+        return `http://localhost:9090/${clean}`
+    }
+
     return(
         <Fragment>
              <section className="py-5">
@@ -77,13 +88,16 @@ function RoomDetail(){
 
                                 <p className="fs-5 mb-4">{data?.content}</p>
                                 {
-                                    data?.imageList?.map((image:string, index:number)=>
-                                        <Fragment key={index}>
-                                            <figure className="mb-4">
-                                                <img className="img-fluid rounded" src={image} alt="..." />
+                                    
+
+                                    data?.imageList?.map((image:string, index:number)=>{
+                                        
+                                    return (
+                                            <figure className="mb-4" key={index}>
+                                                <img className="img-fluid rounded" src={getImageUrl(image)} alt="..." />
                                             </figure>
-                                        </Fragment>
                                     )
+                                    })
                                 }
                             </article>
                         </div>
