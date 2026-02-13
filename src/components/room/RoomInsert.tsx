@@ -2,8 +2,11 @@ import {Fragment, useRef, useState} from "react";
 import {RoomItem, RoomData} from "../../commons/commonsData";
 import {useQuery, useMutation} from "@tanstack/react-query";
 import {fileClient} from "../../http-commons";
+import {useNavigate} from "react-router";
 
 function RoomInsert() {
+    const nav = useNavigate();
+
     const [name, setName] = useState<string>("");
     const [personnel, setPersonnel] = useState<string>("");
     const [content, setContent] = useState<string>("");
@@ -22,8 +25,18 @@ function RoomInsert() {
 
     const {mutate:RoomInsert} = useMutation({
         mutationFn: async (formData: FormData) => {
-            return await fileClient.post(`/room/insert`, formData);
-             
+            return  await fileClient.post(`/room/insert`, formData);
+
+        },
+
+        onSuccess: async (res) => {
+            if(res.data === "SUCCESS"){
+                alert("등록에 성공하셨습니다.");
+                nav(`/room/list`)
+            }
+        },
+        onError: async () => {
+            alert("등록 실패");
         }
     })
 
@@ -52,8 +65,6 @@ function RoomInsert() {
         }
 
         const formData = new FormData();
-        console.log("thumbnail:", thumbnail);
-        console.log("imageList:", imageList);
         formData.append("name", name);
         formData.append("content", content);
         formData.append("personnel", personnel);
@@ -66,6 +77,7 @@ function RoomInsert() {
         })
 
         RoomInsert(formData)
+
     }
 
     return(
@@ -80,7 +92,6 @@ function RoomInsert() {
                         </div>
                         <div className="row gx-5 justify-content-center">
                             <div className="col-lg-8 col-xl-7">
-                                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
 
                                     <div className="mb-4 row">
                                         <label htmlFor="inputPassword" className="col-sm-2 col-form-label">회의실 이름</label>
@@ -142,7 +153,6 @@ function RoomInsert() {
                                             />
                                         </div>
                                     </div>
-                                </form>
                                 <div className="d-grid gap-3 d-md-flex justify-content-md-center m-5">
                                     <button type="button" className="btn btn-outline-primary" onClick={insert}>작성</button>
                                     <button type="button" className="btn btn-outline-primary">취소</button>

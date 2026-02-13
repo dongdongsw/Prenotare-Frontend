@@ -1,16 +1,16 @@
 import {Fragment, useState} from "react";
-import { Link } from "react-router";
+import {Link, useNavigate} from "react-router";
 import {RoomData, RoomItem} from "../../commons/commonsData";
 import {useQuery} from "@tanstack/react-query";
 import {apiClient} from "../../http-commons";
 import PagePrint from "../../commons/PagePrint";
-
+import useRoomDelete from "./roomdelete";
 
 function RoomList(){
-
+    const nav = useNavigate();
     const [curpage, setCurpage] = useState<number>(1);
     const {isLoading, isError, error, data} = useQuery<RoomData>({
-        queryKey: ['room_list' + curpage],
+        queryKey: ['room_list' , curpage],
         queryFn: async()=>{
             const res = await apiClient.get(`/room/list/${curpage}`);
 
@@ -20,6 +20,8 @@ function RoomList(){
         }
     })
 
+    const {mutate : deleteroom} = useRoomDelete();
+
     if(isLoading) {
         return <h1 className={"text-center"}>Loading ...</h1>
     }
@@ -27,15 +29,17 @@ function RoomList(){
         return <h1 className={"text-center"}>Error발생 : {error?.message}</h1>
     }
 
-
-
     return(
         <Fragment>
             <section className="py-5">
                 <div className="container px-5">
                     <h2 className="fw-bolder fs-5 mb-4" style={{"display": "flex", "justifyContent": "space-between", "alignItems": "center" }}>
                         <p>회의실 목록</p>
-                        <a className="btn btn-outline-primary s-5 mb-4" href={"/room/insert"}>룸 만들기</a>
+                        {
+                            window.sessionStorage.getItem('role')==="ROLE_ADMIN" && (
+                                <a className="btn btn-outline-primary s-5 mb-4" href={"/room/insert"}>룸 만들기</a>
+                            )
+                        }
                     </h2>
 
                     <div className="row gx-5">
@@ -64,18 +68,29 @@ function RoomList(){
 
                                     return (
                                         <Fragment key={index}>
-                                            <div className="col-lg-4 mb-5">
+                                            <div className="col-lg-4 mb-5" style={{"position": "relative", "cursor":"pointer"}} onClick={() => nav(`/room/detail/${room.no}`)}>
                                                 <div className="card h-100 shadow border-0">
                                                     <img className="card-img-top" src={getImageUrl(room.thumbnail)} alt="..."
                                                          style={{"height": "282px", "width": "376px"}}/>
-                                                    <div className="card-body p-4">
+                                                    <div className="card-body p-4" >
                                                         {/* 방 이용 가능한 상태 넣기 */}
+                                                        {
+                                                            window.sessionStorage.getItem('role')==="ROLE_ADMIN" && (
+
+                                                            <button type="button" className="btn btn-danger" style={{"position":"absolute", "top":"2%", "right":"3%"}}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    deleteroom(room.no);
+                                                                }}>삭제
+                                                            </button>
+                                                            )
+                                                        }
                                                         <div
                                                             className={`badge ${color} bg-gradient rounded-pill mb-2`}>{roomStatus}</div>
-                                                        <Link className="text-decoration-none link-dark stretched-link"
-                                                              to={`/room/detail/${room.no}`}>
+                                                        <div className="text-decoration-none link-dark "
+                                                              >
                                                             <div className="h5 card-title mb-3">{room.name}</div>
-                                                        </Link>
+                                                        </div>
                                                     </div>
                                                     <div className="card-footer p-4 pt-0 bg-transparent border-top-0">
                                                         <div className="d-flex align-items-end justify-content-between">

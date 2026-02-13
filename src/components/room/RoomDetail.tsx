@@ -1,17 +1,40 @@
 import { Fragment } from "react/jsx-runtime";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
-import { useState } from "react";
+import {useRef, useState} from "react";
 import "./RoomDetail.css"
-import { useQuery } from "@tanstack/react-query";
-import { RoomItem } from "../../commons/commonsData";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import { RoomItem, reserveData } from "../../commons/commonsData";
 import { useParams } from "react-router";
 import {apiClient} from "../../http-commons";
 
 
 function RoomDetail(){
-    const [date, setDate] = useState<Date | null>(null);
+    const [dates, setDate] = useState<Date | null>();
     const {no} = useParams();
+    const [starttime, setStartTime] = useState<string>("");
+    const [endtime, setEndtime] = useState<string>("");
+    const [dates, setDate] = useState<Date | null>();
+
+    const mutation = useMutation({
+        mutationFn: async() => {
+            return await apiClient.post(`/room/detail`, {
+                room_no:no,
+                users_no:window.sessionStorage.getItem("no"),
+                starttime:starttime,
+                endtime:endtime
+            })
+        },
+        onSuccess: async (data) => {
+            console.log(data);
+
+        },
+        onError: async (error) => {
+            console.log(error);
+        }
+
+    })
+
     const {isLoading, isError, error, data} = useQuery<RoomItem>({
         queryKey:['room_detail', no],
         queryFn: async() => {
@@ -27,6 +50,8 @@ function RoomDetail(){
     if(isError) {
         return <h1 className={"text-center"}>Error발생 : {error?.message}</h1>
     }
+
+
 
     const color =
         data?.status === "AVAILABLE"
@@ -72,15 +97,24 @@ function RoomDetail(){
         return `http://localhost:9090/${clean}`
     }
 
+    const {mutate:reserve} = mutation;
+
     return(
         <Fragment>
              <section className="py-5">
                 <div className="container px-5 my-5">
                     <div className="row gx-5">
-                        <header className="mb-4">
-                                    <h1 className="fw-bolder mb-1">{data?.name} | {data?.personnel}명</h1>
+                        <header className="mb-4" style={{"position": "relative"}}>
+                                    <h1 className="fw-bolder mb-1">
+                                        {data?.name} | {data?.personnel}명
+                                        {
+                                            window.sessionStorage.getItem('role')==="ROLE_ADMIN" && (
+                                                <button type="button" className="btn btn-danger" style={{"position":"absolute","top":"10%", "left":"95%"}}>삭제</button>
+                                            )
+                                        }
+                                    </h1>
                                     <div className="text-muted fst-italic mb-2">등록날짜 : {data?.createdAt}</div>
-                                    <a className={`badge ${color} text-decoration-none link-light`} href="#!">{roomStatus}</a>
+                                    <div className={`badge ${color} text-decoration-none link-light`}>{roomStatus}</div>
                                 </header>
 
                         <div className="col-lg-7">
@@ -108,7 +142,7 @@ function RoomDetail(){
                                 </div>
                             </div>
                             <Flatpickr
-                                onChange={([d]) => setDate(d)}
+                                onChange={(dates) => setDate(dates[0])}
                                 options={{
                                     inline: true,
                                     dateFormat: "Y-m-d",
@@ -124,13 +158,17 @@ function RoomDetail(){
                             </div>
                             {
                                 timeArr?.slice(0, -1).map((time:string,index:number)=>
-                                    <button type="button" style={{"color":"white"}} className="btn btn-info my-2 px-2 me-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover" key={index}>
+                                    <button type="button" style={{"color":"white"}} className="btn btn-info my-2 px-2 me-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover"
+                                            key={index}  onClick={() => {
+                                                            setStartTime(time);
+                                                            setEndtime(timeArr[index + 1]);
+                                                        }}>
                                         {time} ~ {timeArr[index + 1]}
                                     </button>
                                 )
                             }
                             <div className="d-grid gap-2 my-4">
-                                <button className="btn btn-info" type="button" style={{"color":"white"}}>예약하기</button>
+                                <button className="btn btn-info" type="button" style={{"color":"white"}} onClick={()=>reserve}>예약하기</button>
                             </div>
                     </div>
                         {/* 댓글 */}

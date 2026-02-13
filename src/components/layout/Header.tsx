@@ -29,9 +29,11 @@ function Header(){
                 setPwd('');
                 pwdRef.current?.focus();
             }
-            else if(data?.msg === 'OK' && data.id && data.name){
+            else if(data?.msg === 'OK'){
+                window.sessionStorage.setItem("no",data?.no);
                 window.sessionStorage.setItem('id',data?.id);
                 window.sessionStorage.setItem('name',data?.name);
+                window.sessionStorage.setItem('role',data?.role);
                 setLogin(true);
                 window.location.reload();
             }
@@ -84,7 +86,7 @@ function Header(){
                             <li className="nav-item"><a className="nav-link" href={"/room/list"}>회의실</a></li>
                             {
                                 login?(
-                                    <li className="nav-item"><a className="nav-link" href="contact.html">마이페이지</a></li>
+                                    <li className="nav-item"><a className="nav-link" href="/mypage">마이페이지</a></li>
                                 ):(
                                     <li className="nav-item"><a className="nav-link" href="contact.html"></a></li>
                                 )

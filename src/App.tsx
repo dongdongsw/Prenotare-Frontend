@@ -7,6 +7,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import RoomList from "./components/room/RoomList";
 import RoomDetail from "./components/room/RoomDetail";
 import RoomInsert from "./components/room/RoomInsert";
+import Mypage from "./components/mypage/Mypage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/room/list" element={<RoomList />}/>
                 <Route path="/room/detail/:no" element={<RoomDetail />}/>
                 <Route path="/room/insert" element={<RoomInsert />}/>
+                <Route path="/mypage" element={<Mypage />}/>
             </Route>
         </Routes>
         <Footer />

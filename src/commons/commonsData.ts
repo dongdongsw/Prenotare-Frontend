@@ -23,7 +23,17 @@ export interface RoomItem{
 }
 
 export interface LoginData{
+    no:number;
     id:string;
     name:string;
     msg:string;
+    role:string;
+}
+
+export interface reserveData{
+    users_no:number;
+    room_no:number;
+    starttime:string;
+    endtime:string;
+
 }

@@ -14,8 +14,8 @@ function Home(){
                                     mobile-first sites with Bootstrap, the world’s most popular front-end open source
                                     toolkit!</p>
                                 <div className="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a className="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
-                                    <a className="btn btn-outline-light btn-lg px-4" href="#!">Learn More</a>
+                                    <a className="btn btn-primary btn-lg px-4 me-sm-3" href="/room/list">구경하기</a>
+                                    <a className="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
                                 </div>
                             </div>
                         </div>
@@ -26,47 +26,8 @@ function Home(){
                 </div>
             </header>
 
-        <section className="py-5" id="features">
-            <div className="container px-5 my-5">
-                <div className="row gx-5">
-                    <div className="col-lg-4 mb-5 mb-lg-0"><h2 className="fw-bolder mb-0">A better way to start building.</h2></div>
-                    <div className="col-lg-8">
-                        <div className="row gx-5 row-cols-1 row-cols-md-2">
-                            <div className="col mb-5 h-100">
-                                <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
-                                    className="bi bi-collection"></i></div>
-                                <h2 className="h5">Featured title</h2>
-                                <p className="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a
-                                    bit more text.</p>
-                            </div>
-                            <div className="col mb-5 h-100">
-                                <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
-                                    className="bi bi-building"></i></div>
-                                <h2 className="h5">Featured title</h2>
-                                <p className="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a
-                                    bit more text.</p>
-                            </div>
-                            <div className="col mb-5 mb-md-0 h-100">
-                                <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
-                                    className="bi bi-toggles2"></i></div>
-                                <h2 className="h5">Featured title</h2>
-                                <p className="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a
-                                    bit more text.</p>
-                            </div>
-                            <div className="col h-100">
-                                <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
-                                    className="bi bi-toggles2"></i></div>
-                                <h2 className="h5">Featured title</h2>
-                                <p className="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a
-                                    bit more text.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <div className="py-5 bg-light">
+        <div className="py-5 bg-light" id="features">
             <div className="container px-5 my-5">
                 <div className="row gx-5 justify-content-center">
                     <div className="col-lg-10 col-xl-7">
@@ -178,23 +139,6 @@ function Home(){
                     </div>
                 </div>
 
-                <aside className="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
-                    <div
-                        className="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
-                        <div className="mb-4 mb-xl-0">
-                            <div className="fs-3 fw-bold text-white">New products, delivered to you.</div>
-                            <div className="text-white-50">Sign up for our newsletter for the latest updates.</div>
-                        </div>
-                        <div className="ms-xl-4">
-                            <div className="input-group mb-2">
-                                <input className="form-control" type="text" placeholder="Email address..."
-                                       aria-label="Email address..." aria-describedby="button-newsletter"/>
-                                <button className="btn btn-outline-light" id="button-newsletter" type="button">Sign up</button>
-                            </div>
-                            <div className="small text-white-50">We care about privacy, and will never share your data.</div>
-                        </div>
-                    </div>
-                </aside>
             </div>
         </section>
     </Fragment>
