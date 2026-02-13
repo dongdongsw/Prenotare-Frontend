@@ -8,6 +8,7 @@ function Header(){
     const [login, setLogin] = useState<boolean>(false);
     const [id,setId] = useState<string>("");
     const [pwd,setPwd] = useState<string>("");
+    const [no, setNo] = useState<number>(0);
     
     const idRef = useRef<HTMLInputElement>(null);
     const pwdRef = useRef<HTMLInputElement>(null);
@@ -30,7 +31,7 @@ function Header(){
                 pwdRef.current?.focus();
             }
             else if(data?.msg === 'OK'){
-                window.sessionStorage.setItem("no",data?.no);
+                window.sessionStorage.setItem("no",String(data?.no));
                 window.sessionStorage.setItem('id',data?.id);
                 window.sessionStorage.setItem('name',data?.name);
                 window.sessionStorage.setItem('role',data?.role);

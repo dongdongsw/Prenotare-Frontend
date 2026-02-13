@@ -33,7 +33,7 @@ export interface LoginData{
 export interface reserveData{
     users_no:number;
     room_no:number;
-    starttime:string;
-    endtime:string;
-
+    startTime:string;
+    endtTime:string;
+    reserveDate:string;
 }

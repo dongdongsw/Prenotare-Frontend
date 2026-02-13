@@ -10,27 +10,30 @@ import {apiClient} from "../../http-commons";
 
 
 function RoomDetail(){
-    const [dates, setDate] = useState<Date | null>();
     const {no} = useParams();
-    const [starttime, setStartTime] = useState<string>("");
-    const [endtime, setEndtime] = useState<string>("");
+    const [startTime, setStartTime] = useState<string>("");
+    const [endTime, setEndtime] = useState<string>("");
     const [dates, setDate] = useState<Date | null>();
 
     const mutation = useMutation({
         mutationFn: async() => {
-            return await apiClient.post(`/room/detail`, {
+            return await apiClient.post(`/room/reserve`, {
                 room_no:no,
-                users_no:window.sessionStorage.getItem("no"),
-                starttime:starttime,
-                endtime:endtime
+                users_no: Number(window.sessionStorage.getItem("no")),
+                startTime:startTime,
+                endTime:endTime,
+                reserveDate:dates?.toISOString().slice(0,10)
             })
         },
-        onSuccess: async (data) => {
-            console.log(data);
+        onSuccess: async (res) => {
+            if(res?.data === "SUCCESS"){
+                alert("예약에 성공하셨습니다.")
+            }
+            
 
         },
-        onError: async (error) => {
-            console.log(error);
+        onError: async (res) => {
+            alert("예약에 실패하셨습니다.")
         }
 
     })
@@ -157,18 +160,22 @@ function RoomDetail(){
                                 </div>
                             </div>
                             {
-                                timeArr?.slice(0, -1).map((time:string,index:number)=>
-                                    <button type="button" style={{"color":"white"}} className="btn btn-info my-2 px-2 me-1" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover"
+                                timeArr?.slice(0, -1).map((time:string,index:number)=> {
+                                    const  isSelected = startTime === time;
+                                    return (
+                                    <button type="button" style={{"color":"white"}} className={`btn  my-2 px-2 me-1 ${isSelected ? "btn-primary" : "btn-info"}`} data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover"
                                             key={index}  onClick={() => {
                                                             setStartTime(time);
                                                             setEndtime(timeArr[index + 1]);
                                                         }}>
                                         {time} ~ {timeArr[index + 1]}
                                     </button>
-                                )
+                                    )
+                                
+                                })
                             }
                             <div className="d-grid gap-2 my-4">
-                                <button className="btn btn-info" type="button" style={{"color":"white"}} onClick={()=>reserve}>예약하기</button>
+                                <button className="btn btn-info" type="button" style={{"color":"white"}} onClick={()=>reserve()}>예약하기</button>
                             </div>
                     </div>
                         {/* 댓글 */}
