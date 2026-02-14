@@ -4,6 +4,7 @@ export interface RoomData{
     startPage:number;
     endPage:number;
     list:RoomItem[];
+    reList:mypageReserveItem[];
 }
 
 export interface RoomItem{
@@ -34,6 +35,31 @@ export interface reserveData{
     users_no:number;
     room_no:number;
     startTime:string;
-    endtTime:string;
+    endTime:string;
     reserveDate:string;
+}
+
+export interface mypageReserveItem{
+
+    no:number;
+    status:string;
+    reserveDate: string;   // LocalDate → string
+    startTime: string;
+    endTime: string;
+    createdAt: string;
+
+    users:{
+        no:number;
+    }
+
+    room:{
+        name:string;
+        no:number;
+        personnel:number;
+        thumbnail:string;
+        content:string;
+    }
+    
+    
+    
 }

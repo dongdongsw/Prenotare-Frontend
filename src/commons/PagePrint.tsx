@@ -21,7 +21,7 @@ const PagePrint:FC<pagePrintProps> = ({data, setCurpage})=>{
             </li>
         );
     }
-    for(let i = startPage; i < totalpage; i++){
+    for(let i = startPage; i <= totalpage; i++){
         pageArr.push(
             <li className={i === curpage ? 'page-item active' : 'page-item'}>
                 <a className="page-link nav-link" onClick={()=>pageChange(i)}>

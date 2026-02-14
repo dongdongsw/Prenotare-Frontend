@@ -1,19 +1,27 @@
 import { Fragment } from "react/jsx-runtime";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+
 import "./RoomDetail.css"
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import { RoomItem, reserveData } from "../../commons/commonsData";
 import { useParams } from "react-router";
 import {apiClient} from "../../http-commons";
 
 
 function RoomDetail(){
+    const queryClient = useQueryClient();
     const {no} = useParams();
     const [startTime, setStartTime] = useState<string>("");
     const [endTime, setEndtime] = useState<string>("");
     const [dates, setDate] = useState<Date | null>();
+    const [timeArr, setTimeArr] = useState<string[]>([]);
+
+
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(today.getDate() + 7);
 
     const mutation = useMutation({
         mutationFn: async() => {
@@ -42,11 +50,14 @@ function RoomDetail(){
         queryKey:['room_detail', no],
         queryFn: async() => {
             const res = await apiClient.get(`/room/detail/${no}`);
-            console.log(res.data);
+            
             return res.data;
         }
     })
 
+    useEffect(() => {
+    queryClient.refetchQueries({ queryKey: ['room_top3'] })
+    }, [])
     if(isLoading) {
         return <h1 className={"text-center"}>Loading ...</h1>
     }
@@ -85,9 +96,6 @@ function RoomDetail(){
     }
     
     const timeArr = data?Time(data?.opentime, data?.closetime) : [];
-    console.log("open:", data?.opentime);
-    console.log("close:", data?.closetime);
-    console.log("timeArr:", timeArr);
 
     const getImageUrl = (img:string)=>{
         if(!img){
@@ -149,6 +157,8 @@ function RoomDetail(){
                                 options={{
                                     inline: true,
                                     dateFormat: "Y-m-d",
+                                    minDate: today,
+                                    maxDate: maxDate
                                 }}
                                 render={(_, ref) => (
                                     <input ref={ref} style={{ display: "none" }} />

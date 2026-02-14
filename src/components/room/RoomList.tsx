@@ -67,8 +67,8 @@ function RoomList(){
                                     }
 
                                     return (
-                                        <Fragment key={index}>
-                                            <div className="col-lg-4 mb-5" style={{"position": "relative", "cursor":"pointer"}} onClick={() => nav(`/room/detail/${room.no}`)}>
+                                        <Fragment>
+                                            <div className="col-lg-4 mb-5" style={{"position": "relative", "cursor":"pointer"}} onClick={() => nav(`/room/detail/${room.no}`)}  key={index}>
                                                 <div className="card h-100 shadow border-0">
                                                     <img className="card-img-top" src={getImageUrl(room.thumbnail)} alt="..."
                                                          style={{"height": "282px", "width": "376px"}}/>
@@ -85,8 +85,7 @@ function RoomList(){
                                                             </button>
                                                             )
                                                         }
-                                                        <div
-                                                            className={`badge ${color} bg-gradient rounded-pill mb-2`}>{roomStatus}</div>
+                                                        <div className={`badge ${color} bg-gradient rounded-pill mb-2`}>{roomStatus}</div>
                                                         <div className="text-decoration-none link-dark "
                                                               >
                                                             <div className="h5 card-title mb-3">{room.name}</div>
@@ -98,7 +97,7 @@ function RoomList(){
                                                                 <div className="small">
                                                                     <div className="fw-bold">최대 이용 인원 : {room.personnel}</div>
                                                                     <div className="text-muted">이용 시간
-                                                                        : {room.opentime} ~ {room.closetime}</div>
+                                                                        : {room.opentime} ~ {room.closetime} | 조회수 : {room.hit}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
